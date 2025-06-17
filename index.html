@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>爱的密码</title>
+    <title>写给小家伙的信</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script>
@@ -14,13 +14,14 @@
                         primary: '#FF4B91',
                         secondary: '#FFB8D1',
                         dark: '#2C3E50',
-                        light: '#F8F9FA'
+                        light: '#FFF5F8'
                     },
                     fontFamily: {
                         romantic: ['Dancing Script', 'cursive']
                     },
                     animation: {
                         'float-sm': 'float-sm 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s infinite'
                     },
                     keyframes: {
                         'float-sm': {
@@ -38,7 +39,7 @@
                 content-visibility: auto;
             }
             .bg-glass {
-                background: rgba(255, 255, 255, 0.15);
+                background: rgba(255, 255, 255, 0.85);
                 backdrop-filter: blur(10px);
                 -webkit-backdrop-filter: blur(10px);
             }
@@ -102,42 +103,95 @@
                 max-height: 60vw;
                 min-height: 280px;
             }
+            .animate-shake {
+                animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+            }
+            @keyframes shake {
+                10%, 90% { transform: translateX(-1px); }
+                20%, 80% { transform: translateX(2px); }
+                30%, 50%, 70% { transform: translateX(-3px); }
+                40%, 60% { transform: translateX(3px); }
+            }
+            .hello-kitty {
+                position: absolute;
+                background-size: contain;
+                background-repeat: no-repeat;
+                will-change: transform, opacity;
+                pointer-events: none;
+            }
+            .kitty-bounce {
+                animation: bounce 2s ease-in-out infinite;
+            }
+            @keyframes bounce {
+                0%, 100% { transform: translateY(0); }
+                50% { transform: translateY(-15px); }
+            }
+            .kitty-float {
+                animation: float 8s ease-in-out infinite;
+            }
+            @keyframes float {
+                0%, 100% { transform: translateY(0) rotate(0deg); }
+                25% { transform: translateY(-20px) translateX(10px) rotate(5deg); }
+                50% { transform: translateY(0) translateX(20px) rotate(0deg); }
+                75% { transform: translateY(-10px) translateX(10px) rotate(-5deg); }
+            }
+            .kitty-spin {
+                animation: spin 15s linear infinite;
+            }
+            @keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
         }
     </style>
 </head>
-<body class="bg-gradient-to-br from-dark to-black min-h-screen flex flex-col items-center justify-center p-4 overflow-hidden relative">
-    <!-- 装饰元素 - 响应式调整 -->
-    <div class="absolute inset-0 overflow-hidden">
+<body class="bg-light min-h-screen flex flex-col items-center justify-center p-4 overflow-hidden relative">
+    <!-- 动态Hello Kitty背景 -->
+    <div id="helloKittyContainer" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
+    
+    <!-- 背景装饰元素 - 响应式调整 -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
         <div class="absolute top-5 left-5 w-16 h-16 bg-primary/20 rounded-full blur-3xl float-sm"></div>
         <div class="absolute bottom-10 right-5 w-24 h-24 bg-secondary/10 rounded-full blur-3xl float-sm" style="animation-delay: -2s;"></div>
         <div class="absolute top-1/3 right-1/4 w-12 h-12 bg-primary/10 rounded-full blur-2xl float-sm" style="animation-delay: -4s;"></div>
     </div>
     
+    <!-- 背景音乐播放器 -->
+    <div class="fixed bottom-4 right-4 z-50 bg-glass rounded-full p-2 shadow-lg">
+        <audio id="bgMusic" loop>
+            <source src="M800001M6iit3L8nVj.mp3" type="audio/mpeg">
+            您的浏览器不支持音频播放
+        </audio>
+        <button id="musicBtn" class="w-10 h-10 rounded-full flex items-center justify-center text-primary hover:bg-primary/10 transition-colors">
+            <i class="fa fa-music text-lg"></i>
+        </button>
+    </div>
+    
     <!-- 主要标题 - 响应式字体 -->
     <div class="text-center mb-8 z-10">
         <h1 class="text-[clamp(1.8rem,5vw,3rem)] font-bold text-gradient bg-gradient-to-r from-primary to-secondary mb-3 tracking-tight">
-            爱的密码
+            写给小家伙的信
         </h1>
-        <p class="text-gray-300 max-w-md mx-auto text-sm md:text-base">
-            输入正确密码，开启专属情书
+        <p class="text-gray-600 max-w-md mx-auto text-sm md:text-base">
+            输入正确密码，打开写给你的信
         </p>
     </div>
     
     <!-- 密码输入卡片 - 响应式尺寸 -->
-    <div id="passwordCard" class="bg-glass border border-white/10 rounded-2xl p-6 w-full max-w-md mx-auto shadow-xl z-20 transform transition-all duration-500 hover:shadow-2xl">
+    <div id="passwordCard" class="bg-glass border border-white/30 rounded-2xl p-6 w-full max-w-md mx-auto shadow-xl z-20 transform transition-all duration-500 hover:shadow-2xl">
         <div class="flex justify-center mb-5">
             <div id="lockIcon" class="text-4xl md:text-5xl text-primary mb-2 transition-transform duration-500">
                 <i class="fa fa-lock"></i>
             </div>
         </div>
         
-        <h2 class="text-xl md:text-2xl font-bold text-white text-center mb-5">
-            输入密码
+        <h2 class="text-xl md:text-2xl font-bold text-primary text-center mb-5">
+            输入密码哦
         </h2>
         
         <div class="space-y-4">
             <div>
-                <label for="password" class="block text-gray-300 mb-2 text-sm">
+                <label for="password" class="block text-gray-600 mb-2 text-sm">
                     专属密码
                 </label>
                 <div class="relative">
@@ -147,18 +201,18 @@
                     <input 
                         type="password" 
                         id="password" 
-                        class="w-full pl-10 pr-4 py-3 rounded-lg bg-white/5 border border-white/10 text-white placeholder-gray-400 input-focus text-base"
+                        class="w-full pl-10 pr-4 py-3 rounded-lg bg-white/70 border border-white/30 text-gray-800 placeholder-gray-400 input-focus text-base"
                         placeholder="请输入密码..."
                     >
                     <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                        <button type="button" id="togglePassword" class="text-gray-400 hover:text-white">
+                        <button type="button" id="togglePassword" class="text-gray-400 hover:text-primary">
                             <i class="fa fa-eye-slash"></i>
                         </button>
                     </div>
                 </div>
                 <div class="mt-2 flex items-center">
-                    <div id="strengthIndicator" class="password-strength bg-gray-600 rounded-full w-0"></div>
-                    <span id="strengthText" class="ml-2 text-xs text-gray-400">输入密码查看强度</span>
+                    <div id="strengthIndicator" class="password-strength bg-gray-200 rounded-full w-0"></div>
+                    <span id="strengthText" class="ml-2 text-xs text-gray-500">输入密码查看强度</span>
                 </div>
             </div>
             
@@ -166,12 +220,12 @@
                 id="submitBtn" 
                 class="w-full py-3 px-6 bg-gradient-to-r from-primary to-secondary rounded-lg text-white font-medium transition-all duration-300 hover:shadow-lg hover:shadow-primary/20 transform hover:-translate-y-1 btn-pulse text-base"
             >
-                <i class="fa fa-heart mr-2"></i>解锁情书
+                <i class="fa fa-heart mr-2"></i>打开写给你的信呀
             </button>
         </div>
         
-        <div id="errorMessage" class="mt-3 text-center text-red-400 text-sm hidden">
-            密码错误，请重试
+        <div id="errorMessage" class="mt-3 text-center text-red-500 text-sm hidden">
+            密码错误，重新试一下哦~
         </div>
     </div>
     
@@ -184,48 +238,48 @@
                     <!-- 信件内容 -->
                     <div id="letterContent" class="letter-content relative h-full overflow-y-auto p-3 md:p-4 bg-white rounded-lg shadow-inner transform">
                         <div class="text-center mb-4 md:mb-6">
-                            <h3 class="text-lg md:text-xl font-bold text-primary mb-2">给我最爱的人</h3>
+                            <h3 class="text-lg md:text-xl font-bold text-primary mb-2">写给我最喜欢的雪</h3>
                             <div class="w-12 md:w-16 h-1 bg-primary/30 mx-auto mt-1"></div>
                         </div>
                         
                         <p class="text-gray-700 mb-3 md:mb-4 leading-relaxed text-sm md:text-base">
-                            亲爱的 <span id="recipientName" class="font-medium">你</span>：
+                            亲爱的 <span id="recipientName" class="font-medium">小雪</span>：
                         </p>
                         
                         <p class="text-gray-700 mb-3 md:mb-4 leading-relaxed text-sm md:text-base">
-                            当你看到这封信的时候，我希望你能感受到我满满的爱意。每一天想到你，我的心都会充满温暖和幸福。你是我生命中最美好的礼物，我珍惜我们在一起的每一刻。
+                            当你看到这封信的时候，就说明咱们已经在一起100天啦。和你在一起这段时间，我每一天都很开心。我的性格有点儿怪，可能会让你不开心，我想如果你不开心的话就和我说哦，我会哄你，哄到你开心为止，但我还是希望你可以天天开心
                         </p>
                         
                         <p class="text-gray-700 mb-4 leading-relaxed text-sm md:text-base">
-                            无论风雨还是晴天，我都会一直在你身边，牵着你的手，共同走过人生的每一个阶段。我爱你，不仅仅是今天，而是永远。
+                            无论什么时候你都要开开心心的，我会一直在你身边，一直和你在一起，我喜欢你，并且爱你，不仅仅是今天，而是永远。
                         </p>
                         
                         <div class="text-right">
-                            <p class="font-bold text-primary text-sm md:text-base">永远爱你的 <span id="senderName" class="font-medium">我</span></p>
+                            <p class="font-bold text-primary text-sm md:text-base">永远爱你的 <span id="senderName" class="font-medium">雨</span></p>
                         </div>
                     </div>
                 </div>
                 
-                <!-- 信封盖 - 调整剪裁路径适应小屏幕 -->
+                <!-- 信封盖 - 打开后不显示遮挡部分 -->
                 <div id="envelopeFlap" class="envelope-flap absolute top-0 left-0 w-full h-1/2 bg-pink-100 z-10" style="clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);">
                     <div class="absolute inset-0 bg-gradient-to-t from-pink-100 to-pink-200"></div>
                 </div>
                 
-                <!-- 信封前面 - 调整剪裁路径适应小屏幕 -->
-                <div class="envelope-front absolute bottom-0 left-0 w-full h-1/2 bg-pink-200 z-20" style="clip-path: polygon(0 0, 100% 0, 85% 100%, 15% 100%);">
+                <!-- 信封前面 - 确保不遮挡信件内容 -->
+                <div class="envelope-front absolute bottom-0 left-0 w-full h-1/2 bg-pink-200 z-5" style="clip-path: polygon(0 0, 100% 0, 85% 100%, 15% 100%);">
                     <div class="absolute inset-0 bg-gradient-to-t from-pink-200 to-pink-150"></div>
                 </div>
             </div>
         </div>
         
-        <button id="resetBtn" class="mt-5 w-full py-3 px-6 bg-white/10 border border-white/20 rounded-lg text-white font-medium transition-all duration-300 hover:bg-white/20 text-base">
+        <button id="resetBtn" class="mt-5 w-full py-3 px-6 bg-white/30 border border-white/40 rounded-lg text-primary font-medium transition-all duration-300 hover:bg-white/50 text-base">
             <i class="fa fa-arrow-left mr-2"></i>返回
         </button>
     </div>
     
     <!-- 底部版权信息 -->
     <div class="absolute bottom-4 text-center text-gray-500 text-xs z-10">
-        <p>爱的密码 &copy; 2023</p>
+        <p>下雨天看雪 &copy; 2025-6-17</p>
     </div>
     
     <script>
@@ -244,13 +298,60 @@
             const envelopeFlap = document.getElementById('envelopeFlap');
             const letterContent = document.getElementById('letterContent');
             const envelope = document.getElementById('envelope');
+            const recipientName = document.getElementById('recipientName');
+            const senderName = document.getElementById('senderName');
+            const bgMusic = document.getElementById('bgMusic');
+            const musicBtn = document.getElementById('musicBtn');
+            const helloKittyContainer = document.getElementById('helloKittyContainer');
             
-            // 配置
+            // 配置 - 可自定义
             const config = {
-                password: "1314", // 默认密码
-                recipient: "你",
-                sender: "我"
+                password: "20250315", // 默认密码
+                recipient: "小家伙", // 收件人姓名
+                sender: "雨", // 发件人姓名
+                musicEnabled: true, // 音乐默认开启
+                helloKittyCount: 9, // 背景Hello Kitty数量
+                // 替换为你的Hello Kitty图片地址
+                helloKittyImages: [
+                    'https://cn.bing.com/images/search?view=detailV2&ccid=QuLQeSf4&id=2BAE40FE9B7B33CCEB123CDA5EB41BD4795BD0C9&thid=OIP.QuLQeSf489zIicC3Jwfa2AHaNJ&mediaurl=https%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F201509%2F06%2F20150906104234_wAd8F.jpeg&exph=2130&expw=1200&q=hello+kitty%E5%9B%BE%E7%89%87&simid=608023626292483172&FORM=IRPRST&ck=48240E692F351F3E16BC97F8AF378600&selectedIndex=0&itb=0&cw=1256&ch=607&ajaxhist=0&ajaxserp=0', // 示例图片，替换为实际图片URL
+                    'https://cn.bing.com/images/search?view=detailV2&ccid=QuLQeSf4&id=2BAE40FE9B7B33CCEB123CDA5EB41BD4795BD0C9&thid=OIP.QuLQeSf489zIicC3Jwfa2AHaNJ&mediaurl=https%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F201509%2F06%2F20150906104234_wAd8F.jpeg&exph=2130&expw=1200&q=hello+kitty%E5%9B%BE%E7%89%87&simid=608023626292483172&FORM=IRPRST&ck=48240E692F351F3E16BC97F8AF378600&selectedIndex=0&itb=0&cw=1256&ch=607&ajaxhist=0&ajaxserp=0', // 示例图片，替换为实际图片URL
+                    'https://cn.bing.com/images/search?view=detailV2&ccid=QuLQeSf4&id=2BAE40FE9B7B33CCEB123CDA5EB41BD4795BD0C9&thid=OIP.QuLQeSf489zIicC3Jwfa2AHaNJ&mediaurl=https%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F201509%2F06%2F20150906104234_wAd8F.jpeg&exph=2130&expw=1200&q=hello+kitty%E5%9B%BE%E7%89%87&simid=608023626292483172&FORM=IRPRST&ck=48240E692F351F3E16BC97F8AF378600&selectedIndex=0&itb=0&cw=1256&ch=607&ajaxhist=0&ajaxserp=0'  // 示例图片，替换为实际图片URL
+                ]
             };
+            
+            // 初始化显示名称
+            recipientName.textContent = config.recipient;
+            senderName.textContent = config.sender;
+            
+            // 创建动态Hello Kitty元素
+            createHelloKittyElements(config.helloKittyCount);
+            
+            // 背景音乐控制
+            musicBtn.addEventListener('click', function() {
+                if (bgMusic.paused) {
+                    bgMusic.play()
+                        .then(() => {
+                            this.innerHTML = '<i class="fa fa-volume-up text-lg"></i>';
+                        })
+                        .catch(error => {
+                            console.error("播放音乐失败:", error);
+                            alert("音乐播放失败，请确保链接有效或浏览器允许自动播放");
+                        });
+                } else {
+                    bgMusic.pause();
+                    this.innerHTML = '<i class="fa fa-volume-off text-lg"></i>';
+                }
+            });
+            
+            // 页面加载后自动播放音乐（需用户交互触发）
+            document.addEventListener('click', function startMusic() {
+                if (config.musicEnabled && bgMusic.paused) {
+                    bgMusic.play().catch(e => {
+                        console.log('自动播放音乐失败，需要用户交互触发', e);
+                    });
+                }
+                document.removeEventListener('click', startMusic);
+            }, { once: true });
             
             // 切换密码可见性
             togglePassword.addEventListener('click', function() {
@@ -275,17 +376,17 @@
                 switch(strength) {
                     case 0:
                         width = '0%';
-                        color = 'bg-gray-600';
+                        color = 'bg-gray-200';
                         text = '输入密码查看强度';
                         break;
                     case 1:
                         width = '20%';
-                        color = 'bg-red-500';
+                        color = 'bg-red-400';
                         text = '非常弱';
                         break;
                     case 2:
                         width = '40%';
-                        color = 'bg-red-400';
+                        color = 'bg-red-300';
                         text = '弱';
                         break;
                     case 3:
@@ -309,7 +410,7 @@
                 strengthIndicator.classList.add(color);
                 strengthIndicator.style.width = width;
                 strengthText.textContent = text;
-                strengthText.className = `ml-2 text-xs ${color === 'bg-gray-600' ? 'text-gray-400' : color}`;
+                strengthText.className = `ml-2 text-xs ${color === 'bg-gray-200' ? 'text-gray-500' : color}`;
             });
             
             // 提交密码
@@ -342,7 +443,7 @@
                     passwordInput.value = '';
                     strengthIndicator.style.width = '0%';
                     strengthText.textContent = '输入密码查看强度';
-                    strengthText.className = 'ml-2 text-xs text-gray-400';
+                    strengthText.className = 'ml-2 text-xs text-gray-500';
                 }, 500);
             });
             
@@ -353,7 +454,7 @@
                     envelopeFlap.style.transform = 'rotateX(0deg)';
                     letterContent.style.transform = 'translateY(0)';
                 } else {
-                    // 打开信封
+                    // 打开信封 - 确保信件内容不被遮挡
                     envelopeFlap.style.transform = 'rotateX(180deg)';
                     letterContent.style.transform = 'translateY(-20px)';
                 }
@@ -373,13 +474,13 @@
                         lockIcon.innerHTML = '<i class="fa fa-key"></i>';
                     }, 400);
                     
-                    // 创建粒子效果 - 优化移动设备性能
+                    // 创建粒子效果
                     createParticles(15);
                     
                     // 延迟显示信件
                     setTimeout(() => {
                         // 隐藏密码卡片
-                        passwordCard.classList.add('opacity-0', 'translateY-10');
+                        passwordCard.classList.add('opacity-0', 'translate-y-10');
                         
                         // 显示信件
                         setTimeout(() => {
@@ -410,7 +511,7 @@
                 }
             }
             
-            // 创建粒子效果 - 优化移动设备性能
+            // 创建粒子效果
             function createParticles(count) {
                 const container = document.body;
                 const cardRect = passwordCard.getBoundingClientRect();
@@ -460,40 +561,44 @@
                 }
             }
             
-            // 背景装饰动画 - 优化移动设备
-            setInterval(() => {
-                createFloatingElement();
-            }, 2500);
-            
-            function createFloatingElement() {
-                const element = document.createElement('div');
-                const size = Math.random() * 12 + 4;
-                const left = Math.random() * 100;
-                const duration = Math.random() * 12 + 8;
-                
-                element.className = 'absolute text-primary/20';
-                element.style.fontSize = `${size}px`;
-                element.style.left = `${left}%`;
-                element.style.bottom = '-15px';
-                element.style.opacity = '0';
-                element.style.transition = `opacity 0.5s, transform ${duration}s linear`;
-                
-                // 随机爱心字符
-                const hearts = ['💖', '💝', '💓', '💗', '💕', '💘', '💞'];
-                element.textContent = hearts[Math.floor(Math.random() * hearts.length)];
-                
-                document.body.appendChild(element);
-                
-                // 触发动画
-                setTimeout(() => {
-                    element.style.opacity = '0.4';
-                    element.style.transform = `translateY(-${window.innerHeight + 30}px) rotate(${Math.random() * 360}deg)`;
-                }, 10);
-                
-                // 动画结束后移除元素
-                setTimeout(() => {
-                    element.remove();
-                }, duration * 1000);
+            // 创建动态Hello Kitty元素
+            function createHelloKittyElements(count) {
+                for (let i = 0; i < count; i++) {
+                    const kitty = document.createElement('div');
+                    kitty.className = 'hello-kitty';
+                    
+                    // 随机大小
+                    const size = Math.floor(Math.random() * 60) + 40; // 40-100px
+                    kitty.style.width = `${size}px`;
+                    kitty.style.height = `${size}px`;
+                    
+                    // 随机位置
+                    const left = Math.floor(Math.random() * 100);
+                    const top = Math.floor(Math.random() * 100);
+                    kitty.style.left = `${left}%`;
+                    kitty.style.top = `${top}%`;
+                    
+                    // 随机透明度
+                    const opacity = (Math.random() * 0.3 + 0.1).toFixed(2); // 0.1-0.4
+                    kitty.style.opacity = opacity;
+                    
+                    // 随机选择Hello Kitty图片
+                    const randomImg = config.helloKittyImages[Math.floor(Math.random() * config.helloKittyImages.length)];
+                    kitty.style.backgroundImage = `url(${randomImg})`;
+                    
+                    // 随机动画
+                    const animations = ['kitty-bounce', 'kitty-float', 'kitty-spin'];
+                    const animation = animations[Math.floor(Math.random() * animations.length)];
+                    const duration = Math.floor(Math.random() * 10) + 10; // 10-20秒
+                    kitty.style.animation = `${animation} ${duration}s linear infinite`;
+                    
+                    // 随机延迟
+                    const delay = Math.floor(Math.random() * 5);
+                    kitty.style.animationDelay = `${delay}s`;
+                    
+                    // 添加到容器
+                    helloKittyContainer.appendChild(kitty);
+                }
             }
         });
     </script>
